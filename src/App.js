@@ -45,7 +45,13 @@ const RowScore = styled.div`
 `;
 
 const ColorsContainer = styled.div`
+  display: flex;
+  padding: 10px;
+  margin-top: 50px;
+  border: 1px solid grey;
+  justify-content: space-around;
 
+  width: 500px;
 `;
 
 class App extends Component {

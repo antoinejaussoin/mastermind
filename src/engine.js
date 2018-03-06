@@ -15,18 +15,25 @@ export const getScore = (combination, secret) => {
   let correct = 0;
   let misplaced = 0;
   const found = [false, false, false, false];
+
   secret.forEach((color, index) => {
     if (combination[index] === color) {
-      found[index] === true;
+      found[index] = true;
       correct++;
-    } else {
-      combination.forEach(combColor => {
-        if (!found[index] && combColor === color) {
-          found[index] === true;
+    }
+  });
+
+  secret.forEach((color, index) => {
+    let foundHere = false;
+    combination.forEach((combColor, combIndex) => {
+      if (index !== combIndex) {
+        if (!foundHere && !found[index] && combColor === color) {
+          found[combIndex] = true;
+          foundHere = true;
           misplaced++;
         }
-      });
-    }
+      }
+    });
   });
   return {
     correct,
