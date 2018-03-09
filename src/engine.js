@@ -15,43 +15,32 @@ export const getSecretCombination = () => {
 export const getScore = (combination, secret) => {
   let correct = 0;
   let misplaced = 0;
-  const found = [false, false, false, false];
+  const correctPositions = [false, false, false, false];
+  const countedPositions = [false, false, false, false];
 
   secret.forEach((color, index) => {
     if (combination[index] === color) {
-      found[index] = true;
+      correctPositions[index] = true;
       correct++;
     }
   });
 
-  combination.forEach((color, index) => {
-    let foundHere = false;
-    secret.forEach((secretColor, secretIndex) => {
-      if (index !== secretIndex && !foundHere) {
-        if (!found[secretIndex]) {
-          if (color === secretColor) {
-            found[secretIndex] = true;
-            foundHere = true;
-            misplaced++;
-          }
-        }
+  for (let index = 0; index < combination.length; index++) {
+    for (let secretIndex = 0; secretIndex < secret.length; secretIndex++) {
+      const color = combination[index];
+      const secretColor = secret[secretIndex];
+      if (index === secretIndex) { continue; }
+      if (correctPositions[secretIndex] || correctPositions[index] || countedPositions[secretIndex]) { continue; }
+      if (color === secretColor) {
+        misplaced++;
+        countedPositions[secretIndex] = true;
+        break;
       }
-    });
-  });
+    }
+  }
+
   return {
     correct,
     misplaced
   };
-
-  // let perfectMatches = combination.filter((col, idx) => col == secret[idx]);
-  // let correct = perfectMatches.length;
-
-  // let secretCountByColors = countBy(secret);
-  // let totalColorMatches = keys(countBy(combination)).reduce(
-  //     (sum, count, color) =>
-  //         sum += Math.min(secretCountByColors[color] || 0, count)
-  //     , 0)
-  // let correctColor = totalColorMatches - correct
-
-  // return {correct: correct, misplaced: correctColor}
 };
